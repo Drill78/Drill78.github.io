@@ -177,6 +177,150 @@
 
     </div>
 
+
+    <script>
+        document.getElementById('svg-canvas').setAttribute('width', document.getElementsByClassName('svg-container')[0].offsetWidth);
+
+
+        var currentNumberNode = 0;
+        var listNode = [];
+        var listEdge = [];
+        var g = new dagreD3.graphlib.Graph()
+            .setGraph({})
+            .setDefaultEdgeLabel(function() {
+                return {};
+            });
+
+        var render = new dagreD3.render();
+        var svg = d3.select("svg"),
+            svgGroup = svg.append("g");
+
+
+
+        function addNode() {
+
+            var name = document.getElementById('node').value;
+
+            if (name == "" || listNode.indexOf(name) >= 0) {
+                alert('le nom du noeud est déjà utilisé ou il est vide.');
+                return;
+            }
+
+            g.setNode(currentNumberNode, {
+                label: name
+            });
+
+            g.nodes().forEach(function(v) {
+                var node = g.node(v);
+                node.rx = node.ry = 5;
+            });
+
+            svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+
+            render(d3.select("svg g"), g);
+            var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+
+            svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+            svg.attr("height", g.graph().height + 40);
+
+            currentNumberNode++;
+            listNode.push(name);
+        }
+
+        function addEdge() {
+            var firstNode = document.getElementById('firstNode').value,
+                secondNode = document.getElementById('secondNode').value;
+
+            if (firstNode == "" || listNode.indexOf(firstNode) < 0) {
+                alert('le premier noeud n\'existe pas ou est vide. ');
+                return;
+            }
+            if (secondNode == "" || listNode.indexOf(secondNode) < 0) {
+                console.log(secondNode);
+                alert('le second noeud n\'existe pas ou est vide. ');
+                return;
+            }
+
+            g.setEdge(listNode.indexOf(firstNode), listNode.indexOf(secondNode));
+
+            listEdge.push([listNode.indexOf(firstNode), listNode.indexOf(secondNode)]);
+
+            svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+
+            render(d3.select("svg g"), g);
+            var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+
+            svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+            svg.attr("height", g.graph().height + 40);
+
+
+            return;
+        }
+
+
+        function resetGraph() {
+
+            g = undefined;
+            document.getElementById('svg-canvas').innerHTML = "";
+            listNode = [];
+            currentNumberNode = 0;
+
+            g = new dagreD3.graphlib.Graph()
+                .setGraph({})
+                .setDefaultEdgeLabel(function() {
+                    return {};
+                });
+            svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+
+            return;
+        }
+
+
+        setInterval(function() {
+            var s = {
+                node: listNode,
+                edge: listEdge
+            };
+
+
+
+            var httpRequest = new XMLHttpRequest()
+
+            httpRequest.open('POST', "http://localhost:3000/api", true);
+
+            httpRequest.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var po = JSON.parse(this.responseText);
+
+                    po[0] = po[0].replace(/\[/g, '{');
+                    po[1] = po[1].replace(/\[/g, '{');
+                    po[2] = po[2].replace(/\[/g, '{');
+                    po[3] = po[3].replace(/\[/g, '{');
+                    po[0] = po[0].replace(/\]/g, '}');
+                    po[1] = po[1].replace(/\]/g, '}');
+                    po[2] = po[2].replace(/\]/g, '}');
+                    po[3] = po[3].replace(/\]/g, '}');
+
+
+                    document.getElementById("pref").innerHTML = po[0];
+                    document.getElementById("comp").innerHTML = po[1];
+                    document.getElementById("grou").innerHTML = po[2];
+                    document.getElementById("stab").innerHTML = po[3];
+
+                }
+            }
+            httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+            httpRequest.send('n=' + encodeURIComponent(JSON.stringify(s)));
+
+
+
+
+        }, 1000);
+    </script>
 </body>
 
 </html>
