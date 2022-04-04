@@ -1,0 +1,26 @@
+{
+  "name": "DungArgumentationFrameworkGUI",
+  "version": "1.0.0",
+  "description": "GUI solver for abstract argumentation (educational)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibaaj/DungArgumentationFrameworkGUI.git"
+  },
+  "author": "",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/ibaaj/DungArgumentationFrameworkGUI/issues"
+  },
+  "homepage": "https://github.com/ibaaj/DungArgumentationFrameworkGUI#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "ws": "^3.2.0"
+  },
+  "devDependencies": {}
+}
