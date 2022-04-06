@@ -5,11 +5,11 @@
   "author": "Matt South <matt@mattsouth.net>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Drill78/arguegraph"
+    "url": "https://github.com/mattsouth/arguegraph"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Drill78/arguegraph/issues"
+    "url": "https://github.com/mattsouth/arguegraph/issues"
   },
   "devDependencies": {
     "chai": "3.5.0",
